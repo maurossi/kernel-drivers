@@ -34,12 +34,16 @@ WL_PATCHES := \
 	012-linux590.patch \
 	013-linux5100.patch \
 
+ifndef TAR_PATH
+  TAR_PATH = /usr/bin/tar
+endif
+
 $(WL_SRC):
 	@echo Downloading $(@F)...
 	$(hide) mkdir -p $(@D) && /usr/bin/curl -k https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/$(@F) > $@
 
 $(WL_LIB): $(WL_SRC) $(addprefix $(LOCAL_PATH)/,$(WL_PATCHES))
-	$(hide) tar zxf $< -C $(@D) --overwrite -m && \
+	$(hide) $(TAR_PATH) zxf $< -C $(@D) --overwrite -m && \
 		rm -rf $@ && mv $(@D)/lib $@ && touch $@ && \
 		cat $(filter %.patch,$^) | patch -p1 -d $(@D)
 
