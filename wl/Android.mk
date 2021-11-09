@@ -33,6 +33,7 @@ WL_PATCHES := \
 	011-linux560.patch \
 	012-linux590.patch \
 	013-linux5100.patch \
+	014-linux5150.patch \
 
 $(WL_SRC):
 	@echo Downloading $(@F)...

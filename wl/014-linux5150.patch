@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 4dd4080..b0c3b6e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -117,7 +117,7 @@
+ GCCVERSION := $(shell expr `echo $(GCCVERSION)` | cut -b1-3)
+ GE_49 := $(shell expr `echo $(GCCVERSION)` \>= 490)
+ 
+-EXTRA_CFLAGS :=
++EXTRA_CFLAGS := -Wno-incompatible-pointer-types
+ 
+ ifeq ($(APIFINAL),CFG80211)
+   EXTRA_CFLAGS += -DUSE_CFG80211
