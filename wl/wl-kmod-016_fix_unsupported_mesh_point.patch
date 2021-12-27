@@ -1,6 +1,6 @@
-diff -Naur a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
---- a/src/wl/sys/wl_cfg80211_hybrid.c	2019-04-14 17:35:23.565460847 +0200
-+++ b/src/wl/sys/wl_cfg80211_hybrid.c	2019-06-01 14:37:25.675650990 +0200
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_hybrid.c hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_cfg80211_hybrid.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_hybrid.c	2019-04-14 17:35:23.565460847 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_cfg80211_hybrid.c	2019-06-01 14:37:25.675650990 +0200
 @@ -522,6 +522,10 @@
  	switch (type) {
  	case NL80211_IFTYPE_MONITOR:
@@ -61,7 +61,7 @@ diff -Naur a/src/wl/sys/wl_cfg80211_hybrid.c b/src/wl/sys/wl_cfg80211_hybrid.c
 +		.types = BIT(NL80211_IFTYPE_STATION),
 +	},
 +	{
-+		.max = 1,
++		.max = 1, 
 +		.types = BIT(NL80211_IFTYPE_AP),
 +	},
 +};
