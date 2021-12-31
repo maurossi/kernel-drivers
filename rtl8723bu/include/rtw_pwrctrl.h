@@ -22,14 +22,14 @@
 
 
 #define FW_PWR0	0
-#define FW_PWR1 	1
-#define FW_PWR2 	2
-#define FW_PWR3 	3
+#define FW_PWR1		1
+#define FW_PWR2		2
+#define FW_PWR3		3
 
 
 #define HW_PWR0	7
-#define HW_PWR1 	6
-#define HW_PWR2 	2
+#define HW_PWR1		6
+#define HW_PWR2		2
 #define HW_PWR3	0
 #define HW_PWR4	8
 
@@ -43,6 +43,7 @@
 #ifdef CONFIG_BT_COEXIST
 #define BTCOEX_ALIVE	BIT(4)
 #endif // CONFIG_BT_COEXIST
+
 
 enum Power_Mgnt
 {
@@ -60,6 +61,10 @@ enum Power_Mgnt
 	PS_MODE_NUM,
 };
 
+#ifdef CONFIG_PNO_SUPPORT
+#define MAX_PNO_LIST_COUNT 16
+#define MAX_SCAN_LIST_COUNT 14 //2.4G only
+#endif
 
 /*
 	BIT[2:0] = HW state
@@ -196,6 +201,50 @@ typedef enum _PS_DENY_REASON
 	PS_DENY_OTHERS = 31
 } PS_DENY_REASON;
 
+#ifdef CONFIG_PNO_SUPPORT
+typedef struct pno_nlo_info
+{
+	u32 fast_scan_period;				//Fast scan period
+	u32	ssid_num;				//number of entry
+	u32	slow_scan_period;			//slow scan period
+	u32	fast_scan_iterations;			//Fast scan iterations
+	u8	ssid_length[MAX_PNO_LIST_COUNT];	//SSID Length Array
+	u8	ssid_cipher_info[MAX_PNO_LIST_COUNT];	//Cipher information for security
+	u8	ssid_channel_info[MAX_PNO_LIST_COUNT];	//channel information
+}pno_nlo_info_t;
+
+typedef struct pno_ssid {
+	u32		SSID_len;
+	u8		SSID[32];
+} pno_ssid_t;
+
+typedef struct pno_ssid_list {
+	pno_ssid_t	node[MAX_PNO_LIST_COUNT];
+}pno_ssid_list_t;
+
+typedef struct pno_scan_channel_info
+{
+	u8	channel;
+	u8	tx_power;
+	u8	timeout;
+	u8	active;				//set 1 means active scan, or pasivite scan.
+}pno_scan_channel_info_t;
+
+typedef struct pno_scan_info
+{
+	u8	enableRFE;			//Enable RFE
+	u8	period_scan_time;		//exclusive with fast_scan_period and slow_scan_period
+	u8	periodScan;			//exclusive with fast_scan_period and slow_scan_period
+	u8	orig_80_offset;			//original channel 80 offset
+	u8	orig_40_offset;			//original channel 40 offset
+	u8	orig_bw;			//original bandwidth
+	u8	orig_ch;			//original channel
+	u8	channel_num;			//number of channel
+	u64	rfe_type;			//rfe_type && 0x00000000000000ff
+	pno_scan_channel_info_t ssid_channel_info[MAX_SCAN_LIST_COUNT];
+}pno_scan_info_t;
+#endif //CONFIG_PNO_SUPPORT
+
 struct pwrctrl_priv
 {
 	_pwrlock	lock;
@@ -208,7 +257,7 @@ struct pwrctrl_priv
 	u8	pwr_mode;
 	u8	smart_ps;
 	u8	bcn_ant_mode;
-	u8 	dtim;
+	u8	dtim;
 
 	u32	alives;
 	_workitem cpwm_event;
@@ -228,10 +277,8 @@ struct pwrctrl_priv
 	u32	cur_ps_level;
 	u32	reg_rfps_level;
 
-	uint 	ips_enter_cnts;
-	uint 	ips_leave_cnts;
-	uint 	lps_enter_cnts;
-	uint 	lps_leave_cnts;
+	uint	ips_enter_cnts;
+	uint	ips_leave_cnts;
 
 	u8	ips_mode;
 	u8	ips_org_mode;
@@ -269,16 +316,32 @@ struct pwrctrl_priv
 	u8		wowlan_wake_reason;
 	u8		wowlan_ap_mode;
 	u8		wowlan_mode;
-	u8		wowlan_p2p_mode;
+#ifdef CONFIG_WOWLAN
+	u8		wowlan_pattern;
+	u8		wowlan_magic;
+	u8		wowlan_unicast;
+	u8		wowlan_pattern_idx;
 	u8		wowlan_pno_enable;
-	_timer 	pwr_state_check_timer;
+#ifdef CONFIG_PNO_SUPPORT
+	u8		pno_in_resume;
+	u8		pno_inited;
+	pno_nlo_info_t	*pnlo_info;
+	pno_scan_info_t	*pscan_info;
+	pno_ssid_list_t	*pno_ssid_list;
+#endif
+	u32		wowlan_pattern_context[8][5];
+	u64		wowlan_fw_iv;
+#endif // CONFIG_WOWLAN
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+	_timer	pwr_state_check_timer;
 	int		pwr_state_check_interval;
+#endif
 	u8		pwr_state_check_cnts;
 
-	int 		ps_flag; /* used by autosuspend */
+	int		ps_flag; /* used by autosuspend */
 
 	rt_rf_power_state	rf_pwrstate;//cur power state, only for IPS
-	//rt_rf_power_state 	current_rfpwrstate;
+	//rt_rf_power_state	current_rfpwrstate;
 	rt_rf_power_state	change_rfpwrstate;
 
 	u8		bHWPowerdown; /* power down mode selection. 0:radio off, 1:power down */
@@ -369,7 +432,6 @@ void LPS_Enter(PADAPTER padapter, const char *msg);
 void LPS_Leave(PADAPTER padapter, const char *msg);
 void traffic_check_for_leave_lps(PADAPTER padapter, u8 tx, u32 tx_packets);
 void rtw_set_ps_mode(PADAPTER padapter, u8 ps_mode, u8 smart_ps, u8 bcn_ant_mode, const char *msg);
-void rtw_set_fw_in_ips_mode(PADAPTER padapter, u8 enable);
 void rtw_set_rpwm(_adapter * padapter, u8 val8);
 #endif
 

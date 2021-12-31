@@ -43,14 +43,13 @@
 #define REG_SYS_FUNC_EN				0x0002
 #define REG_APS_FSMCO					0x0004
 #define REG_SYS_CLKR					0x0008
-#define REG_SYS_CLK_CTRL				REG_SYS_CLKR
 #define REG_9346CR						0x000A
 #define REG_SYS_EEPROM_CTRL			0x000A
 #define REG_EE_VPD						0x000C
 #define REG_AFE_MISC					0x0010
 #define REG_SPS0_CTRL					0x0011
 #define REG_SPS0_CTRL_6					0x0016
-#define REG_POWER_OFF_IN_PROCESS 		0x0017
+#define REG_POWER_OFF_IN_PROCESS		0x0017
 #define REG_SPS_OCP_CFG				0x0018
 #define REG_RSV_CTRL					0x001C
 #define REG_RF_CTRL						0x001F
@@ -158,10 +157,6 @@
 #define REG_HMEBOX_2					0x01D8
 #define REG_HMEBOX_3					0x01DC
 #define REG_LLT_INIT					0x01E0
-#define REG_HMEBOX_EXT_0				0x01F0
-#define REG_HMEBOX_EXT_1				0x01F4
-#define REG_HMEBOX_EXT_2				0x01F8
-#define REG_HMEBOX_EXT_3				0x01FC
 
 
 //-----------------------------------------------------
@@ -193,29 +188,28 @@
 //
 //-----------------------------------------------------
 #define REG_PCIE_CTRL_REG				0x0300
-#define REG_INT_MIG					0x0304	/* Interrupt Migration */
-#define REG_BCNQ_DESA					0x0308	/* TX Beacon Descriptor Address */
-#define REG_HQ_DESA					0x0310	/* TX High Queue Descriptor Address */
-#define REG_MGQ_DESA					0x0318	/* TX Manage Queue Descriptor Address */
-#define REG_VOQ_DESA					0x0320	/* TX VO Queue Descriptor Address */
-#define REG_VIQ_DESA					0x0328	/* TX VI Queue Descriptor Address */
-#define REG_BEQ_DESA					0x0330	/* TX BE Queue Descriptor Address */
-#define REG_BKQ_DESA					0x0338	/* TX BK Queue Descriptor Address */
-#define REG_RX_DESA					0x0340	/* RX Queue Descriptor Address */
+#define REG_INT_MIG						0x0304	// Interrupt Migration
+#define REG_BCNQ_DESA					0x0308	// TX Beacon Descriptor Address
+#define REG_HQ_DESA					0x0310	// TX High Queue Descriptor Address
+#define REG_MGQ_DESA					0x0318	// TX Manage Queue Descriptor Address
+#define REG_VOQ_DESA					0x0320	// TX VO Queue Descriptor Address
+#define REG_VIQ_DESA					0x0328	// TX VI Queue Descriptor Address
+#define REG_BEQ_DESA					0x0330	// TX BE Queue Descriptor Address
+#define REG_BKQ_DESA					0x0338	// TX BK Queue Descriptor Address
+#define REG_RX_DESA						0x0340	// RX Queue	Descriptor Address
 //sherry added for DBI Read/Write  20091126
-#define REG_DBI_WDATA					0x0348	/*  Backdoor REG for Access Configuration */
-#define REG_DBI_RDATA					0x034C	/* Backdoor REG for Access Configuration */
-#define REG_DBI_CTRL					0x0350	/* Backdoor REG for Access Configuration */
-#define REG_DBI_FLAG					0x0352	/* Backdoor REG for Access Configuration */
-#define REG_MDIO					0x0354	/* MDIO for Access PCIE PHY */
-#define REG_DBG_SEL					0x0360	/* Debug Selection Register */
-#define REG_PCIE_HRPWM					0x0361	/* PCIe RPWM */
-#define REG_PCIE_HCPWM					0x0363	/* PCIe CPWM */
+#define REG_DBI_WDATA					0x0348	// Backdoor REG for Access Configuration
+#define REG_DBI_RDATA				0x034C	//Backdoor REG for Access Configuration
+#define REG_DBI_CTRL					0x0350	//Backdoor REG for Access Configuration
+#define REG_DBI_FLAG					0x0352	//Backdoor REG for Access Configuration
+#define REG_MDIO						0x0354	// MDIO for Access PCIE PHY
+#define REG_DBG_SEL						0x0360	// Debug Selection Register
+#define REG_PCIE_HRPWM					0x0361	//PCIe RPWM
+#define REG_PCIE_HCPWM					0x0363	//PCIe CPWM
 #define REG_WATCH_DOG					0x0368
-#define REG_RX_RXBD_NUM					0x0382
 
 // RTL8723 series -------------------------------
-#define REG_PCIE_HISR_EN				0x0394	/* PCIE Local Interrupt Enable Register */
+#define REG_PCIE_HISR_EN				0x0394	//PCIE Local Interrupt Enable Register
 #define REG_PCIE_HISR					0x03A0
 #define REG_PCIE_HISRE					0x03A4
 #define REG_PCIE_HIMR					0x03A8
@@ -232,22 +226,13 @@
 //	0x0400h ~ 0x047Fh	Protocol Configuration
 //
 //-----------------------------------------------------
-
-/* 92C, 92D */
-#define REG_VOQ_INFO	0x0400
-#define REG_VIQ_INFO	0x0404
-#define REG_BEQ_INFO	0x0408
-#define REG_BKQ_INFO	0x040C
-
-/* 88E, 8723A, 8812A, 8821A, 92E, 8723B */
-#define REG_Q0_INFO	0x400
-#define REG_Q1_INFO	0x404
-#define REG_Q2_INFO	0x408
-#define REG_Q3_INFO	0x40C
-
-#define REG_MGQ_INFO	0x0410
-#define REG_HGQ_INFO	0x0414
-#define REG_BCNQ_INFO	0x0418
+#define REG_VOQ_INFORMATION			0x0400
+#define REG_VIQ_INFORMATION			0x0404
+#define REG_BEQ_INFORMATION			0x0408
+#define REG_BKQ_INFORMATION			0x040C
+#define REG_MGQ_INFORMATION			0x0410
+#define REG_HGQ_INFORMATION			0x0414
+#define REG_BCNQ_INFORMATION			0x0418
 #define REG_TXPKT_EMPTY				0x041A
 #define REG_CPU_MGQ_INFORMATION		0x041C
 #define REG_FWHW_TXQ_CTRL				0x0420
@@ -273,18 +258,8 @@
 #define REG_FAST_EDCA_CTRL				0x0460
 #define REG_RD_RESP_PKT_TH				0x0463
 
-/* 8723A, 8812A, 8821A, 92E, 8723B */
-#define REG_Q4_INFO	0x468
-#define REG_Q5_INFO	0x46C
-#define REG_Q6_INFO	0x470
-#define REG_Q7_INFO	0x474
-
 #define REG_INIRTS_RATE_SEL				0x0480
 #define REG_INIDATA_RATE_SEL			0x0484
-
-/* 8723B, 92E, 8812A, 8821A*/
-#define REG_MACID_SLEEP_3				0x0484
-#define REG_MACID_SLEEP_1				0x0488
 
 #define REG_POWER_STAGE1				0x04B4
 #define REG_POWER_STAGE2				0x04B8
@@ -298,19 +273,8 @@
 #define REG_RTS_MAX_AGGR_NUM			0x04CB
 #define REG_BAR_MODE_CTRL				0x04CC
 #define REG_RA_TRY_RATE_AGG_LMT		0x04CF
-
-/* 8723A */
-#define REG_MACID_DROP	0x04D0
-
-/* 88E */
-#define REG_EARLY_MODE_CONTROL	0x04D0
-
-/* 8723B, 92E, 8812A, 8821A */
-#define REG_MACID_SLEEP_2	0x04D0
-
-/* 8723A, 8723B, 92E, 8812A, 8821A */
-#define REG_MACID_SLEEP	0x04D4
-
+#define REG_EARLY_MODE_CONTROL		0x04D0
+#define REG_MACID_SLEEP				0x04D4
 #define REG_NQOS_SEQ					0x04DC
 #define REG_QOS_SEQ					0x04DE
 #define REG_NEED_CPU_HANDLE			0x04E0
@@ -424,10 +388,10 @@
 
 //RXERR_RPT
 #define RXERR_TYPE_OFDM_PPDU			0
-#define RXERR_TYPE_OFDM_FALSE_ALARM 	1
-#define RXERR_TYPE_OFDM_MPDU_OK 		2
+#define RXERR_TYPE_OFDM_FALSE_ALARM	1
+#define RXERR_TYPE_OFDM_MPDU_OK			2
 #define RXERR_TYPE_OFDM_MPDU_FAIL	3
-#define RXERR_TYPE_CCK_PPDU 			4
+#define RXERR_TYPE_CCK_PPDU			4
 #define RXERR_TYPE_CCK_FALSE_ALARM	5
 #define RXERR_TYPE_CCK_MPDU_OK		6
 #define RXERR_TYPE_CCK_MPDU_FAIL		7
@@ -435,8 +399,8 @@
 #define RXERR_TYPE_HT_FALSE_ALARM	9
 #define RXERR_TYPE_HT_MPDU_TOTAL		10
 #define RXERR_TYPE_HT_MPDU_OK			11
-#define RXERR_TYPE_HT_MPDU_FAIL 		12
-#define RXERR_TYPE_RX_FULL_DROP 		15
+#define RXERR_TYPE_HT_MPDU_FAIL			12
+#define RXERR_TYPE_RX_FULL_DROP			15
 
 #define RXERR_COUNTER_MASK			0xFFFFF
 #define RXERR_RPT_RST					BIT(27)
@@ -571,14 +535,14 @@
 #define PhyDataR					UnusedRegister
 
 // Min Spacing related settings.
-#define MAX_MSS_DENSITY_2T 			0x13
-#define MAX_MSS_DENSITY_1T 			0x0A
+#define MAX_MSS_DENSITY_2T			0x13
+#define MAX_MSS_DENSITY_1T			0x0A
 
 //----------------------------------------------------------------------------
 //       8192C Cmd9346CR bits					(Offset 0xA, 16bit)
 //----------------------------------------------------------------------------
 #define CmdEEPROM_En				BIT5	 // EEPROM enable when set 1
-#define CmdEERPOMSEL				BIT4 	// System EEPROM select, 0: boot from E-FUSE, 1: The EEPROM used is 9346
+#define CmdEERPOMSEL				BIT4	// System EEPROM select, 0: boot from E-FUSE, 1: The EEPROM used is 9346
 #define Cmd9346CR_9356SEL			BIT4
 
 //----------------------------------------------------------------------------
@@ -783,7 +747,7 @@ Default: 00b.
 #define CAM_NOTVALID			0x0000
 #define CAM_USEDK				BIT5
 
-#define CAM_CONTENT_COUNT 	8
+#define CAM_CONTENT_COUNT	8
 
 #define CAM_NONE				0x0
 #define CAM_WEP40				0x01
@@ -1048,7 +1012,7 @@ Current IOREG MAP
 0x2000h ~ 0x3FFFh   8051 FW Download Region (8196 Bytes)
 */
 	//----------------------------------------------------------------------------
-	//		 8192C (TXPAUSE) transmission pause 	(Offset 0x522, 8 bits)
+	//		 8192C (TXPAUSE) transmission pause	(Offset 0x522, 8 bits)
 	//----------------------------------------------------------------------------
 // Note:
 //	The the bits of stoping AC(VO/VI/BE/BK) queue in datasheet RTL8192S/RTL8192C are wrong,
@@ -1071,27 +1035,28 @@ Current IOREG MAP
 #define RCR_APP_ICV				BIT29	// MACRX will retain the ICV at the bottom of the packet.
 #define RCR_APP_PHYST_RXFF		BIT28	// PHY Status is appended before RX packet in RXFF
 #define RCR_APP_BA_SSN			BIT27	// SSN of previous TXBA is appended as after original RXDESC as the 4-th DW of RXDESC.
-#define RCR_VHT_DACK			BIT26	/* This bit to control response type for vht single mpdu data packet. 1. ACK as response 0. BA as response */
-#define RCR_TCPOFLD_EN			BIT25	/* Enable TCP checksum offload */
+#define RCR_NONQOS_VHT			BIT26	// Reserved
+#define RCR_RSVD_BIT25			BIT25	// Reserved
 #define RCR_ENMBID				BIT24	// Enable Multiple BssId. Only response ACK to the packets whose DID(A1) matching to the addresses in the MBSSID CAM Entries.
 #define RCR_LSIGEN				BIT23	// Enable LSIG TXOP Protection function. Search KEYCAM for each rx packet to check if LSIGEN bit is set.
 #define RCR_MFBEN				BIT22	// Enable immediate MCS Feedback function. When Rx packet with MRQ = 1'b1, then search KEYCAM to find sender's MCS Feedback function and send response.
-#define RCR_DISCHKPPDLLEN		BIT21	/* Do not check PPDU while the PPDU length is smaller than 14 byte. */
-#define RCR_PKTCTL_DLEN			BIT20	/* While rx path dead lock occurs, reset rx path */
-#define RCR_DISGCLK				BIT19	/* Disable macrx clock gating control (no used) */
+#define RCR_RSVD_BIT21			BIT21	// Reserved
+#define RCR_RSVD_BIT20			BIT20	// Reserved
+#define RCR_RSVD_BIT19			BIT19	// Reserved
 #define RCR_TIM_PARSER_EN		BIT18	// RX Beacon TIM Parser.
-#define RCR_BC_MD_EN			BIT17	/* Broadcast data packet more data bit check interrupt enable.*/
-#define RCR_UC_MD_EN			BIT16	/* Unicast data packet more data bit check interrupt enable. */
-#define RCR_RXSK_PERPKT			BIT15	/* Executing key search per MPDU */
+#define RCR_BM_DATA_EN			BIT17	// Broadcast data packet interrupt enable.
+#define RCR_UC_DATA_EN			BIT16	// Unicast data packet interrupt enable.
+#define RCR_RSVD_BIT15			BIT15	// Reserved
 #define RCR_HTC_LOC_CTRL		BIT14	// MFC<--HTC=1 MFC-->HTC=0
 #define RCR_AMF					BIT13	// Accept management type frame
 #define RCR_ACF					BIT12	// Accept control type frame. Control frames BA, BAR, and PS-Poll (when in AP mode) are not controlled by this bit. They are controlled by ADF.
 #define RCR_ADF					BIT11	// Accept data type frame. This bit also regulates BA, BAR, and PS-Poll (AP mode only).
-#define RCR_DISDECMYPKT			BIT10	/* This bit determines whether hw need to do decryption.1: If A1 match, do decryption.0: Do decryption. */
+#define RCR_RSVD_BIT10			BIT10	// Reserved
 #define RCR_AICV					BIT9		// Accept ICV error packet
 #define RCR_ACRC32				BIT8		// Accept CRC32 error packet
 #define RCR_CBSSID_BCN			BIT7		// Accept BSSID match packet (Rx beacon, probe rsp)
 #define RCR_CBSSID_DATA		BIT6		// Accept BSSID match packet (Data)
+#define RCR_CBSSID				RCR_CBSSID_DATA	// Accept BSSID match packet
 #define RCR_APWRMGT			BIT5		// Accept power management packet
 #define RCR_ADD3				BIT4		// Accept address 3 match packet
 #define RCR_AB					BIT3		// Accept broadcast packet
@@ -1216,7 +1181,6 @@ Current IOREG MAP
 #define RFINI_RDY				BIT(5)
 #define WINTINI_RDY				BIT(6)
 #define RAM_DL_SEL				BIT(7)
-#define CPU_DL_READY			BIT(15) /* add flag  by gw for fw download ready 20130826 */
 #define ROM_DLEN				BIT(19)
 #define CPRST					BIT(23)
 
@@ -1338,13 +1302,13 @@ Current IOREG MAP
 #define HQSEL_HIQ				BIT(5)
 
 // For normal driver, 0x10C
-#define _TXDMA_CMQ_MAP(x) 	 		(((x)&0x3) << 16)
-#define _TXDMA_HIQ_MAP(x) 	 		(((x)&0x3) << 14)
-#define _TXDMA_MGQ_MAP(x) 	 		(((x)&0x3) << 12)
-#define _TXDMA_BKQ_MAP(x) 	 		(((x)&0x3) << 10)
-#define _TXDMA_BEQ_MAP(x) 	 		(((x)&0x3) << 8 )
-#define _TXDMA_VIQ_MAP(x) 	 		(((x)&0x3) << 6 )
-#define _TXDMA_VOQ_MAP(x) 	 		(((x)&0x3) << 4 )
+#define _TXDMA_CMQ_MAP(x)			(((x)&0x3) << 16)
+#define _TXDMA_HIQ_MAP(x)			(((x)&0x3) << 14)
+#define _TXDMA_MGQ_MAP(x)			(((x)&0x3) << 12)
+#define _TXDMA_BKQ_MAP(x)			(((x)&0x3) << 10)
+#define _TXDMA_BEQ_MAP(x)			(((x)&0x3) << 8 )
+#define _TXDMA_VIQ_MAP(x)			(((x)&0x3) << 6 )
+#define _TXDMA_VOQ_MAP(x)			(((x)&0x3) << 4 )
 
 #define QUEUE_EXTRA				0
 #define QUEUE_LOW				1
@@ -1423,7 +1387,7 @@ Current IOREG MAP
 //#define RW_RELEASE_EN				BIT(2)
 
 //2 REG_RXPKT_NUM, 0x0284
-#define 	RXPKT_RELEASE_POLL	BIT(16)
+#define		RXPKT_RELEASE_POLL	BIT(16)
 #define	RXDMA_IDLE				BIT(17)
 #define	RW_RELEASE_EN			BIT(18)
 
@@ -1551,7 +1515,6 @@ Current IOREG MAP
 #define SCR_TXBCUSEDK			BIT(6)			// Force Tx Broadcast packets Use Default Key
 #define SCR_RXBCUSEDK			BIT(7)			// Force Rx Broadcast packets Use Default Key
 #define SCR_CHK_KEYID			BIT(8)
-#define SCR_CHK_BMC				BIT(9)			/* add option to support a2+keyid+bcm */
 
 //-----------------------------------------------------
 //
@@ -1571,24 +1534,24 @@ Current IOREG MAP
 
 //SDIO host local register space mapping.
 #define SDIO_LOCAL_MSK				0x0FFF
-#define WLAN_IOREG_MSK 	             	0x7FFF
-#define WLAN_FIFO_MSK			      	0x1FFF	// Aggregation Length[12:0]
-#define WLAN_RX0FF_MSK			      	0x0003
+#define WLAN_IOREG_MSK			0x7FFF
+#define WLAN_FIFO_MSK				0x1FFF	// Aggregation Length[12:0]
+#define WLAN_RX0FF_MSK				0x0003
 
 #define SDIO_WITHOUT_REF_DEVICE_ID	0	// Without reference to the SDIO Device ID
-#define SDIO_LOCAL_DEVICE_ID           		0	// 0b[16], 000b[15:13]
+#define SDIO_LOCAL_DEVICE_ID			0	// 0b[16], 000b[15:13]
 #define WLAN_TX_HIQ_DEVICE_ID			4	// 0b[16], 100b[15:13]
-#define WLAN_TX_MIQ_DEVICE_ID 		5	// 0b[16], 101b[15:13]
-#define WLAN_TX_LOQ_DEVICE_ID 		6	// 0b[16], 110b[15:13]
+#define WLAN_TX_MIQ_DEVICE_ID		5	// 0b[16], 101b[15:13]
+#define WLAN_TX_LOQ_DEVICE_ID		6	// 0b[16], 110b[15:13]
 #define WLAN_TX_EXQ_DEVICE_ID		3	// 0b[16], 011b[15:13]
-#define WLAN_RX0FF_DEVICE_ID 			7	// 0b[16], 111b[15:13]
-#define WLAN_IOREG_DEVICE_ID 			8	// 1b[16]
+#define WLAN_RX0FF_DEVICE_ID			7	// 0b[16], 111b[15:13]
+#define WLAN_IOREG_DEVICE_ID			8	// 1b[16]
 
 //SDIO Tx Free Page Index
-#define HI_QUEUE_IDX           			0
-#define MID_QUEUE_IDX         			1
-#define LOW_QUEUE_IDX 	      			2
-#define PUBLIC_QUEUE_IDX    			3
+#define HI_QUEUE_IDX				0
+#define MID_QUEUE_IDX				1
+#define LOW_QUEUE_IDX				2
+#define PUBLIC_QUEUE_IDX			3
 
 #define SDIO_MAX_TX_QUEUE			3		// HIQ, MIQ and LOQ
 #define SDIO_MAX_RX_QUEUE			1
@@ -1686,14 +1649,10 @@ Current IOREG MAP
 
 // SDIO Tx FIFO related
 #define SDIO_TX_FREE_PG_QUEUE			4	// The number of Tx FIFO free page
-#define SDIO_TX_FIFO_PAGE_SZ 			128
+#define SDIO_TX_FIFO_PAGE_SZ			128
 
-#ifdef CONFIG_SDIO_HCI
-	#define MAX_TX_AGG_PACKET_NUMBER 	0x8
-#else
-	#define MAX_TX_AGG_PACKET_NUMBER 	0xFF
-	#define MAX_TX_AGG_PACKET_NUMBER_8812 	64
-#endif
+#define MAX_TX_AGG_PACKET_NUMBER	0xFF
+#define MAX_TX_AGG_PACKET_NUMBER_8812	64
 
 //-----------------------------------------------------
 //
@@ -1744,11 +1703,11 @@ Current IOREG MAP
 
 //2 8192D PartNo.
 #define PARTNO_92D_NIC							(BIT7|BIT6)
-#define PARTNO_92D_NIC_REMARK 				(BIT5|BIT4)
-#define PARTNO_SINGLE_BAND_VS  				BIT3
-#define PARTNO_SINGLE_BAND_VS_REMARK 		BIT1
-#define PARTNO_CONCURRENT_BAND_VC 			(BIT3|BIT2)
-#define PARTNO_CONCURRENT_BAND_VC_REMARK 	(BIT1|BIT0)
+#define PARTNO_92D_NIC_REMARK				(BIT5|BIT4)
+#define PARTNO_SINGLE_BAND_VS				BIT3
+#define PARTNO_SINGLE_BAND_VS_REMARK		BIT1
+#define PARTNO_CONCURRENT_BAND_VC			(BIT3|BIT2)
+#define PARTNO_CONCURRENT_BAND_VC_REMARK	(BIT1|BIT0)
 
 //========================================================
 // General definitions
@@ -1758,20 +1717,13 @@ Current IOREG MAP
 #define LAST_ENTRY_OF_TX_PKT_BUFFER_8812			255
 #define LAST_ENTRY_OF_TX_PKT_BUFFER_8723B		255
 #define LAST_ENTRY_OF_TX_PKT_BUFFER_8192C		255
-#define LAST_ENTRY_OF_TX_PKT_BUFFER_8703B		255
 #define LAST_ENTRY_OF_TX_PKT_BUFFER_DUAL_MAC	127
-#define LAST_ENTRY_OF_TX_PKT_BUFFER_8188F		255
 
 #define POLLING_LLT_THRESHOLD				20
-#if defined(CONFIG_RTL8723B) && defined(CONFIG_PCI_HCI)
-#define POLLING_READY_TIMEOUT_COUNT		6000
-#else
 #define POLLING_READY_TIMEOUT_COUNT		1000
-#endif
 
 
 // GPIO BIT
-#define	HAL_8812A_HW_GPIO_WPS_BIT	BIT2
 #define	HAL_8192C_HW_GPIO_WPS_BIT	BIT2
 #define	HAL_8192EU_HW_GPIO_WPS_BIT	BIT7
 #define	HAL_8188E_HW_GPIO_WPS_BIT	BIT7

@@ -21,17 +21,10 @@
 #define __HAL_PHY_H__
 
 
-#if DISABLE_BB_RF
-#define	HAL_FW_ENABLE				0
-#define	HAL_MAC_ENABLE			0
-#define	HAL_BB_ENABLE				0
-#define	HAL_RF_ENABLE				0
-#else // FPGA_PHY and ASIC
-#define 	HAL_FW_ENABLE				1
-#define	HAL_MAC_ENABLE			1
+#define HAL_FW_ENABLE				1
+#define	HAL_MAC_ENABLE				1
 #define	HAL_BB_ENABLE				1
 #define	HAL_RF_ENABLE				1
-#endif
 
 #define	RF6052_MAX_TX_PWR			0x3F
 #define	RF6052_MAX_REG_88E			0xFF
@@ -40,7 +33,8 @@
 #define	RF6052_MAX_REG	\
 		(RF6052_MAX_REG_88E > RF6052_MAX_REG_92C) ? RF6052_MAX_REG_88E: RF6052_MAX_REG_92C
 
-#define GET_RF6052_REAL_MAX_REG(_Adapter)	RF6052_MAX_REG_92C
+#define GET_RF6052_REAL_MAX_REG(_Adapter)	\
+		RF6052_MAX_REG_92C
 
 #define	RF6052_MAX_PATH				2
 
@@ -55,8 +49,15 @@
 
 
 /*--------------------------Define Parameters-------------------------------*/
+typedef enum _BAND_TYPE{
+	BAND_ON_2_4G = 0,
+	BAND_ON_5G,
+	BAND_ON_BOTH,
+	BANDMAX
+}BAND_TYPE,*PBAND_TYPE;
+
 typedef	enum _RF_TYPE{
-	RF_TYPE_MIN = 0, 	// 0
+	RF_TYPE_MIN = 0,	// 0
 	RF_8225=1,			// 1 11b/g RF for verification only
 	RF_8256=2,			// 2 11b/g/n
 	RF_8258=3,			// 3 11a/b/g/n RF
@@ -65,13 +66,23 @@ typedef	enum _RF_TYPE{
 	RF_TYPE_MAX
 }RF_TYPE_E,*PRF_TYPE_E;
 
-#define	TX_1S			0
+typedef enum _RF_PATH{
+	RF_PATH_A = 0,
+	RF_PATH_B,
+	RF_PATH_C,
+	RF_PATH_D
+}RF_PATH, *PRF_PATH;
 
-#define	RF_PATH_MAX_92C_88E 		2
+#define	TX_1S			0
+#define	TX_2S			1
+#define	TX_3S			2
+#define	TX_4S			3
+
+#define	RF_PATH_MAX_92C_88E		2
 #define	RF_PATH_MAX_90_8812		4	//Max RF number 90 support
 
 typedef enum _ANTENNA_PATH{
-       ANTENNA_NONE 	= 0,
+       ANTENNA_NONE	= 0,
 	ANTENNA_D		= 1,
 	ANTENNA_C		= 2,
 	ANTENNA_CD	= 3,
@@ -141,24 +152,6 @@ typedef struct _SwChnlCmd{
 	u32				Para2;
 	u32				msDelay;
 }SwChnlCmd;
-
-typedef struct _R_ANTENNA_SELECT_OFDM{
-	u32			r_tx_antenna:4;
-	u32			r_ant_l:4;
-	u32			r_ant_non_ht:4;
-	u32			r_ant_ht1:4;
-	u32			r_ant_ht2:4;
-	u32			r_ant_ht_s1:4;
-	u32			r_ant_non_ht_s1:4;
-	u32			OFDM_TXSC:2;
-	u32			Reserved:2;
-}R_ANTENNA_SELECT_OFDM;
-
-typedef struct _R_ANTENNA_SELECT_CCK{
-	u8			r_cckrx_enable_2:2;
-	u8			r_cckrx_enable:2;
-	u8			r_ccktx_enable:4;
-}R_ANTENNA_SELECT_CCK;
 
 typedef struct RF_Shadow_Compare_Map {
 	// Shadow register value

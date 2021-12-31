@@ -27,11 +27,7 @@
 #define MAX_TXPWR_IDX_NMODE_92S	63
 #define Reset_Cnt_Limit			3
 
-#ifdef CONFIG_PCI_HCI
-#define MAX_AGGR_NUM	0x0B
-#else
 #define MAX_AGGR_NUM	0x07
-#endif // CONFIG_PCI_HCI
 
 
 /*--------------------------Define Parameters End-------------------------------*/
@@ -84,7 +80,7 @@ s32 PHY_MACConfig8723B(PADAPTER padapter);
 int
 PHY_ConfigRFWithParaFile_8723B(
 	IN	PADAPTER			Adapter,
-	IN	u8* 				pFileName,
+	IN	u8*				pFileName,
 	RF_PATH				eRFPath
 );
 
@@ -108,7 +104,7 @@ PHY_GetTxPowerIndex_8723B(
 VOID
 PHY_GetTxPowerLevel8723B(
 	IN	PADAPTER		Adapter,
-	OUT s32*		    		powerlevel
+	OUT s32*				powerlevel
 	);
 
 VOID
