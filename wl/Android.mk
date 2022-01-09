@@ -28,6 +28,6 @@ $(WL_SRC):
 $(WL_LIB): $(WL_SRC) $(WL_PATCHES)
 	$(hide) gzip -d -c $< | tar xf - -C $(@D) --overwrite -m && \
 		rm -rf $@ && mv $(@D)/lib $@ && touch $@ && \
-		cat $(filter %.patch,$^) | patch -p1 -d $(@D)
+		cat $(filter %.patch,$^) | /usr/bin/patch -p1 -d $(@D)
 
 $(WL_PATH): $(WL_LIB)
