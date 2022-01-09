@@ -32,6 +32,11 @@
 #ifdef CONFIG_IEEE80211W
 #define _BIP_				0x8
 #endif //CONFIG_IEEE80211W
+/* 802.11W use wrong key */
+#define IEEE80211W_RIGHT_KEY	0x0
+#define IEEE80211W_WRONG_KEY	0x1
+#define IEEE80211W_NO_KEY		0x2
+
 #define is_wep_enc(alg) (((alg) == _WEP40_) || ((alg) == _WEP104_))
 
 const char *security_type_str(u8 value);
@@ -69,7 +74,7 @@ union pn48	{
 
 	u64	val;
 
-#ifdef __LITTLE_ENDIAN
+#ifdef CONFIG_LITTLE_ENDIAN
 
 struct {
   u8 TSC0;
@@ -82,7 +87,7 @@ struct {
   u8 TSC7;
 } _byte_;
 
-#else
+#elif defined(CONFIG_BIG_ENDIAN)
 
 struct {
   u8 TSC7;
@@ -108,11 +113,11 @@ union Keytype {
 typedef struct _RT_PMKID_LIST
 {
 	u8						bUsed;
-	u8						Bssid[6];
+	u8 						Bssid[6];
 	u8						PMKID[16];
 	u8						SsidBuf[33];
 	u8*						ssid_octet;
-	u16						ssid_length;
+	u16 						ssid_length;
 } RT_PMKID_LIST, *PRT_PMKID_LIST;
 
 
@@ -124,8 +129,8 @@ struct security_priv
 	/* WEP */
 	u32	  dot11PrivacyKeyIndex;	// this is only valid for legendary wep, 0~3 for key id. (tx key index)
 	union Keytype dot11DefKey[4];			// this is only valid for def. key
-	u32	dot11DefKeylen[4];
-	u8	key_mask; /* use to restore wep key after hal_init */
+	u32 	dot11DefKeylen[4];
+	u8 	key_mask; /* use to restore wep key after hal_init */
 
 	u32 dot118021XGrpPrivacy;	// This specify the privacy algthm. used for Grp key
 	u32	dot118021XGrpKeyid;		// key id used for Grp Key ( tx key index)
@@ -134,6 +139,7 @@ struct security_priv
 	union Keytype	dot118021XGrprxmickey[4];
 	union pn48		dot11Grptxpn;			// PN48 used for Grp Key xmit.
 	union pn48		dot11Grprxpn;			// PN48 used for Grp Key recv.
+	u8			iv_seq[4][8];
 #ifdef CONFIG_IEEE80211W
 	u32	dot11wBIPKeyid;						// key id used for BIP Key ( tx key index)
 	union Keytype	dot11wBIPKey[6];		// BIP Key, for index4 and index5
@@ -171,16 +177,17 @@ struct security_priv
 	s32	sw_encrypt;//from registry_priv
 	s32	sw_decrypt;//from registry_priv
 
-	s32	hw_decrypted;//if the rx packets is hw_decrypted==_FALSE, it means the hw has not been ready.
+	s32 	hw_decrypted;//if the rx packets is hw_decrypted==_FALSE, it means the hw has not been ready.
 
 
 	//keeps the auth_type & enc_status from upper layer ioctl(wpa_supplicant or wzc)
 	u32 ndisauthtype;	// NDIS_802_11_AUTHENTICATION_MODE
 	u32 ndisencryptstatus;	// NDIS_802_11_ENCRYPTION_STATUS
 
-	WLAN_BSSID_EX sec_bss;  //for joinbss (h2c buffer) usage
-
 	NDIS_802_11_WEP ndiswep;
+#ifdef PLATFORM_WINDOWS
+	u8 KeyMaterial[16];// variable length depending on above field.
+#endif
 
 	u8 assoc_info[600];
 	u8 szofcapability[256]; //for wpa2 usage
@@ -232,7 +239,7 @@ struct security_priv
 #endif /* DBG_SW_SEC_CNT */
 };
 
-struct rtw_sha256_state {
+struct sha256_state {
 	u64 length;
 	u32 state[8], curlen;
 	u8 buf[64];
@@ -302,7 +309,7 @@ do{\
 
 
 #define ROL32( A, n )	( ((A) << (n)) | ( ((A)>>(32-(n)))  & ( (1UL << (n)) - 1 ) ) )
-#define ROR32( A, n )	ROL32( (A), 32-(n) )
+#define ROR32( A, n ) 	ROL32( (A), 32-(n) )
 
 struct mic_data
 {
@@ -465,6 +472,8 @@ void wpa_tdls_generate_tpk(_adapter *padapter, PVOID sta);
 int wpa_tdls_ftie_mic(u8 *kck, u8 trans_seq,
 						u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie,
 						u8 *mic);
+int wpa_tdls_teardown_ftie_mic(u8 *kck, u8 *lnkid, u16 reason,
+	u8 dialog_token, u8 trans_seq, u8 *ftie, u8 *mic);
 int tdls_verify_mic(u8 *kck, u8 trans_seq,
 						u8 *lnkid, u8 *rsnie, u8 *timeoutie, u8 *ftie);
 #endif //CONFIG_TDLS

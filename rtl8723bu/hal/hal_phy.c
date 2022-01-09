@@ -80,7 +80,7 @@ PHY_CalculateBitShift(
  *
  * Revised History:
  * When			Who		Remark
- * 11/20/2008	MHC		Create Version 0.
+ * 11/20/2008 	MHC		Create Version 0.
  *
  *---------------------------------------------------------------------------*/
 u32

@@ -109,10 +109,6 @@
 #define REG_TXPKTBUF_BCNQ_BDNY_8723B	0x0424
 #define REG_TXPKTBUF_MGQ_BDNY_8723B	0x0425
 #define REG_TXPKTBUF_WMAC_LBK_BF_HD_8723B	0x045D
-#ifdef CONFIG_WOWLAN
-#define REG_TXPKTBUF_IV_LOW             0x0484
-#define REG_TXPKTBUF_IV_HIGH            0x0488
-#endif
 #define REG_AMPDU_BURST_MODE_8723B	0x04BC
 
 //-----------------------------------------------------
@@ -164,7 +160,10 @@
 //	0x0100h ~ 0x01FFh	MACTOP General Configuration
 //
 //-----------------------------------------------------
-
+#undef IS_E_CUT
+#define IS_E_CUT(version)		FALSE
+#undef IS_F_CUT
+#define IS_F_CUT(version)		((GET_CVID_CUT_VERSION(version) == E_CUT_VERSION) ? TRUE : FALSE)
 
 //-----------------------------------------------------
 //
@@ -180,11 +179,6 @@
 #define BIT_USB_RXDMA_AGG_EN	BIT(31)
 #define RXDMA_AGG_MODE_EN		BIT(1)
 
-#ifdef CONFIG_WOWLAN
-#define RXPKT_RELEASE_POLL		BIT(16)
-#define RXDMA_IDLE				BIT(17)
-#define RW_RELEASE_EN			BIT(18)
-#endif
 
 //-----------------------------------------------------
 //
@@ -210,7 +204,9 @@
 //-----------------------------------------------------
 #ifdef CONFIG_RF_GAIN_OFFSET
 
+#ifdef CONFIG_RTL8723B
 #define EEPROM_RF_GAIN_OFFSET			0xC1
+#endif
 
 #define EEPROM_RF_GAIN_VAL				0x1F6
 #endif //CONFIG_RF_GAIN_OFFSET
@@ -267,13 +263,24 @@
 #define	IMR_TXFOVW_8723B					BIT9			// Transmit FIFO Overflow
 #define	IMR_RXFOVW_8723B					BIT8			// Receive FIFO Overflow
 
+#ifdef CONFIG_PCI_HCI
+//#define IMR_RX_MASK		(IMR_ROK_8723B|IMR_RDU_8723B|IMR_RXFOVW_8723B)
+#define IMR_TX_MASK			(IMR_VODOK_8723B|IMR_VIDOK_8723B|IMR_BEDOK_8723B|IMR_BKDOK_8723B|IMR_MGNTDOK_8723B|IMR_HIGHDOK_8723B)
+
+#define RT_BCN_INT_MASKS	(IMR_BCNDMAINT0_8723B | IMR_TXBCN0OK_8723B | IMR_TXBCN0ERR_8723B | IMR_BCNDERR0_8723B)
+
+#define RT_AC_INT_MASKS	(IMR_VIDOK_8723B | IMR_VODOK_8723B | IMR_BEDOK_8723B|IMR_BKDOK_8723B)
 #endif
 
-//should be renamed and moved to another file
-typedef	enum _BOARD_TYPE_8192CUSB{
-	BOARD_USB_DONGLE			= 0,		// USB dongle
-	BOARD_USB_High_PA		= 1,		// USB dongle with high power PA
-	BOARD_MINICARD			= 2,		// Minicard
-	BOARD_USB_SOLO			= 3,		// USB solo-Slim module
-	BOARD_USB_COMBO			= 4,		// USB Combo-Slim module
-} BOARD_TYPE_8723BUSB, *PBOARD_TYPE_8723BUSB;
+//========================================================
+// General definitions
+//========================================================
+
+#define MACID_NUM_8723B 128
+#define SEC_CAM_ENT_NUM_8723B 64
+#define NSS_NUM_8723B 1
+#define BAND_CAP_8723B (BAND_CAP_2G)
+#define BW_CAP_8723B (BW_CAP_20M | BW_CAP_40M)
+#define PROTO_CAP_8723B (PROTO_CAP_11B|PROTO_CAP_11G|PROTO_CAP_11N)
+
+#endif /* __RTL8723B_SPEC_H__ */
