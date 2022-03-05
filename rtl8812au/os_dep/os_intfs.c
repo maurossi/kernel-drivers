@@ -2378,7 +2378,7 @@ static int _rtw_drv_register_netdev(_adapter *padapter, char *name)
 	/* alloc netdev name */
 	rtw_init_netdev_name(pnetdev, name);
 
-	_rtw_memcpy(pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
+	_rtw_memcpy((void *)pnetdev->dev_addr, padapter->eeprompriv.mac_addr, ETH_ALEN);
 
 	/* Tell the network stack we exist */
 	if (register_netdev(pnetdev) != 0) {
