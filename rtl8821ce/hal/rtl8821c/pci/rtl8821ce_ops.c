@@ -86,9 +86,17 @@ static void rtl8821ce_reset_bd(_adapter *padapter)
 				#ifdef CONFIG_64BIT_DMA
 					mapping |= (dma_addr_t)GET_TX_BD_PHYSICAL_ADDR0_HIGH(tx_bd) << 32;
 				#endif
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0))
+					dma_unmap_single(&pdvobjpriv->ppcidev->dev,
+#else
 					pci_unmap_single(pdvobjpriv->ppcidev,
+#endif
 						mapping,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0))
+						pxmitbuf->len, DMA_TO_DEVICE);
+#else
 						pxmitbuf->len, PCI_DMA_TODEVICE);
+#endif
 					rtw_free_xmitbuf(t_priv, pxmitbuf);
 				} else {
 					RTW_INFO("%s(): qlen(%d) is not zero, but have xmitbuf in pending queue\n",
