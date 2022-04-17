@@ -1,0 +1,90 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/shared/linux_osl.c hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/shared/linux_osl.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/shared/linux_osl.c	2018-04-18 13:53:37.484164000 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/shared/linux_osl.c		2022-04-16 23:18:36.154395810 +0100
+@@ -599,8 +599,12 @@ osl_dma_alloc_consistent(osl_t *osh, uint size, uint16 align_bits, uint *alloced
+ 	va = kmalloc(size, GFP_ATOMIC | __GFP_ZERO);
+ 	if (va)
+ 		*pap = (ulong)__virt_to_phys(va);
++#else
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
++	va = dma_alloc_coherent(&to_pci_dev(osh->pdev)->dev, size, (dma_addr_t*)pap, GFP_KERNEL);
+ #else
+ 	va = pci_alloc_consistent(osh->pdev, size, (dma_addr_t*)pap);
++#endif
+ #endif
+ 	return va;
+ }
+@@ -612,9 +616,13 @@ osl_dma_free_consistent(osl_t *osh, void *va, uint size, ulong pa)
+ 
+ #ifdef __ARM_ARCH_7A__
+ 	kfree(va);
++#else
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
++	dma_free_coherent(&to_pci_dev(osh->pdev)->dev, size, va, (dma_addr_t)pa);
+ #else
+ 	pci_free_consistent(osh->pdev, size, va, (dma_addr_t)pa);
+ #endif
++#endif
+ }
+ 
+ uint BCMFASTPATH
+@@ -623,7 +631,11 @@ osl_dma_map(osl_t *osh, void *va, uint size, int direction, void *p, hnddma_seg_
+ 	int dir;
+ 
+ 	ASSERT((osh && (osh->magic == OS_HANDLE_MAGIC)));
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
++	dir = (direction == DMA_TX)? DMA_TO_DEVICE: DMA_FROM_DEVICE;
++#else
+ 	dir = (direction == DMA_TX)? PCI_DMA_TODEVICE: PCI_DMA_FROMDEVICE;
++#endif
+ 
+ #if defined(__ARM_ARCH_7A__) && defined(BCMDMASGLISTOSL)
+ 	if (dmah != NULL) {
+@@ -635,13 +647,21 @@ osl_dma_map(osl_t *osh, void *va, uint size, int direction, void *p, hnddma_seg_
+ 			if (skb_is_nonlinear(skb)) {
+ 				nsegs = skb_to_sgvec(skb, sg, 0, PKTLEN(osh, skb));
+ 				ASSERT((nsegs > 0) && (totsegs + nsegs <= MAX_DMA_SEGS));
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
++				pdma_map_sg(&to_pci_dev(osh->pdev)->dev, sg, nsegs, dir);
++#else
+ 				pci_map_sg(osh->pdev, sg, nsegs, dir);
++#endif
+ 			} else {
+ 				nsegs = 1;
+ 				ASSERT(totsegs + nsegs <= MAX_DMA_SEGS);
+ 				sg->page_link = 0;
+ 				sg_set_buf(sg, PKTDATA(osh, skb), PKTLEN(osh, skb));
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
++				dma_map_single(&to_pci_dev(osh->pdev)->dev, PKTDATA(osh, skb), PKTLEN(osh, skb), dir);
++#else
+ 				pci_map_single(osh->pdev, PKTDATA(osh, skb), PKTLEN(osh, skb), dir);
++#endif
+ 			}
+ 			totsegs += nsegs;
+ 			totlen += PKTLEN(osh, skb);
+@@ -656,7 +676,11 @@ osl_dma_map(osl_t *osh, void *va, uint size, int direction, void *p, hnddma_seg_
+ 	}
+ #endif 
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
++	return (dma_map_single(&to_pci_dev(osh->pdev)->dev, va, size, dir));
++#else
+ 	return (pci_map_single(osh->pdev, va, size, dir));
++#endif
+ }
+ 
+ void BCMFASTPATH
+@@ -665,8 +689,13 @@ osl_dma_unmap(osl_t *osh, uint pa, uint size, int direction)
+ 	int dir;
+ 
+ 	ASSERT((osh && (osh->magic == OS_HANDLE_MAGIC)));
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 18, 0)
++	dir = (direction == DMA_TX)? DMA_TO_DEVICE: DMA_FROM_DEVICE;
++	dma_unmap_single(&to_pci_dev(osh->pdev)->dev, (uint32)pa, size, dir);
++#else
+ 	dir = (direction == DMA_TX)? PCI_DMA_TODEVICE: PCI_DMA_FROMDEVICE;
+ 	pci_unmap_single(osh->pdev, (uint32)pa, size, dir);
++#endif
+ }
+ 
+ #if defined(BCMDBG_ASSERT)
