@@ -481,8 +481,13 @@ void rtw_cfg80211_indicate_connect(_adapter *padapter)
 
 		DBG_871X("%s call cfg80211_roamed\n", __FUNCTION__);
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,12,0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,0,0))
+		roam_info.links[0].channel = notify_channel;
+		roam_info.links[0].bssid = cur_network->network.MacAddress;
+#else
 		roam_info.channel = notify_channel;
 		roam_info.bssid = cur_network->network.MacAddress;
+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(6,0,0)) */
 		roam_info.req_ie =
 			pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2;
 		roam_info.req_ie_len =
@@ -3660,7 +3665,11 @@ static int cfg80211_rtw_change_beacon(struct wiphy *wiphy, struct net_device *nd
 	return ret;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,0,0))
+static int cfg80211_rtw_stop_ap(struct wiphy *wiphy, struct net_device *ndev, unsigned int link_id)
+#else
 static int cfg80211_rtw_stop_ap(struct wiphy *wiphy, struct net_device *ndev)
+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(6,0,0)) */
 {
 	DBG_871X(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 	return 0;
