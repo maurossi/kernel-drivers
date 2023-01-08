@@ -1,0 +1,78 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_hybrid.c hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_cfg80211_hybrid.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_hybrid.c	2022-10-10 17:43:08.436733364 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_cfg80211_hybrid.c		2022-10-10 18:00:51.319204611 +0200
+@@ -109,17 +109,30 @@ static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, s32 *dbm);
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38)
+ static s32 wl_cfg80211_config_default_key(struct wiphy *wiphy,
+-           struct net_device *dev, u8 key_idx, bool unicast, bool multicast);
++           struct net_device *dev
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++           , int link_id
++#endif	// (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++           , u8 key_idx, bool unicast, bool multicast);
+ #else
+ static s32 wl_cfg80211_config_default_key(struct wiphy *wiphy,
+            struct net_device *dev, u8 key_idx);
+ #endif
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)
+ static s32 wl_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++           int link_id,
++#endif	// (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+            u8 key_idx, bool pairwise, const u8 *mac_addr, struct key_params *params);
+ static s32 wl_cfg80211_del_key(struct wiphy *wiphy, struct net_device *dev,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++           int link_id,
++#endif	// (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+            u8 key_idx, bool pairwise, const u8 *mac_addr);
+ static s32 wl_cfg80211_get_key(struct wiphy *wiphy, struct net_device *dev,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++           int link_id,
++#endif	// (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+            u8 key_idx, bool pairwise, const u8 *mac_addr,
+            void *cookie, void (*callback) (void *cookie, struct key_params *params));
+ #else
+@@ -1240,7 +1253,11 @@ static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, s32 *dbm)
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 38)
+ static s32
+ wl_cfg80211_config_default_key(struct wiphy *wiphy,
+-	struct net_device *dev, u8 key_idx, bool unicast, bool multicast)
++	struct net_device *dev
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++	, int link_id
++#endif	// (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++	, u8 key_idx, bool unicast, bool multicast)
+ #else
+ static s32
+ wl_cfg80211_config_default_key(struct wiphy *wiphy,
+@@ -1265,6 +1282,9 @@ wl_cfg80211_config_default_key(struct wiphy *wiphy,
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)
+ static s32
+ wl_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++                    int link_id,
++#endif	// (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+                     u8 key_idx, bool pairwise, const u8 *mac_addr, struct key_params *params)
+ #else
+ static s32
+@@ -1386,6 +1406,9 @@ wl_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev,
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)
+ static s32
+ wl_cfg80211_del_key(struct wiphy *wiphy, struct net_device *dev,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++                    int link_id,
++#endif	// (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+                     u8 key_idx, bool pairwise, const u8 *mac_addr)
+ #else
+ static s32
+@@ -1429,6 +1452,9 @@ wl_cfg80211_del_key(struct wiphy *wiphy, struct net_device *dev,
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)
+ static s32
+ wl_cfg80211_get_key(struct wiphy *wiphy, struct net_device *dev,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
++                    int link_id,
++#endif	// (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+                     u8 key_idx, bool pairwise, const u8 *mac_addr, void *cookie,
+                     void (*callback) (void *cookie, struct key_params * params))
+ #else
