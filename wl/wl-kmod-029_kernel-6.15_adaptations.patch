@@ -1,0 +1,23 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_linux.c hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_linux.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_linux.c      2025-08-15 17:43:08.436733364 +0200
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_linux.c           2025-08-15 18:00:51.319204611 +0200
+@@ -165,6 +165,7 @@
+ #endif
+ 
+ MODULE_LICENSE("MIXED/Proprietary");
++MODULE_DESCRIPTION("Broadcom STA Wireless driver");
+ 
+ static struct pci_device_id wl_id_table[] =
+ {
+@@ -2492,7 +2493,11 @@
+ 	ASSERT(t);
+ 	if (t->set) {
+ 		t->set = FALSE;
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0))
++               if (!timer_delete(&t->timer)) {
++#else
+ 		if (!del_timer(&t->timer)) {
++#endif
+ #ifdef BCMDBG
+ 			WL_INFORM(("wl%d: Failed to delete timer %s\n", wl->unit, t->name));
+ #endif
