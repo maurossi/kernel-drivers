@@ -1,25 +1,25 @@
-EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
-EXTRA_CFLAGS += -O1
-#EXTRA_CFLAGS += -O3
-#EXTRA_CFLAGS += -Wall
-#EXTRA_CFLAGS += -Wextra
-#EXTRA_CFLAGS += -Werror
-#EXTRA_CFLAGS += -pedantic
-#EXTRA_CFLAGS += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
+ccflags-y += $(USER_ccflags-y)
+ccflags-y += -O1
+#ccflags-y += -O3
+#ccflags-y += -Wall
+#ccflags-y += -Wextra
+#ccflags-y += -Werror
+#ccflags-y += -pedantic
+#ccflags-y += -Wshadow -Wpointer-arith -Wcast-qual -Wstrict-prototypes -Wmissing-prototypes
 
-EXTRA_CFLAGS += -Wno-unused-variable
-EXTRA_CFLAGS += -Wno-unused-value
-EXTRA_CFLAGS += -Wno-unused-label
-EXTRA_CFLAGS += -Wno-unused-parameter
-EXTRA_CFLAGS += -Wno-unused-function
-EXTRA_CFLAGS += -Wno-unused
-#EXTRA_CFLAGS += -Wno-uninitialized
-#EXTRA_CFLAGS += -Wno-error=date-time	# Fix compile error on gcc 4.9 and later
+ccflags-y += -Wno-unused-variable
+ccflags-y += -Wno-unused-value
+ccflags-y += -Wno-unused-label
+ccflags-y += -Wno-unused-parameter
+ccflags-y += -Wno-unused-function
+ccflags-y += -Wno-unused
+#ccflags-y += -Wno-uninitialized
+#ccflags-y += -Wno-error=date-time	# Fix compile error on gcc 4.9 and later
 
-EXTRA_CFLAGS += -I$(src)/include
-EXTRA_CFLAGS += -I$(src)/hal/phydm
+ccflags-y += -I$(src)/include
+ccflags-y += -I$(src)/hal/phydm
 
-EXTRA_LDFLAGS += --strip-debug
+ldflags-y += --strip-debug
 
 ########################## WIFI IC ############################
 CONFIG_RTL8723B = y
@@ -100,7 +100,7 @@ _OUTSRC_FILES := hal/phydm/phydm_debug.o	\
 
 
 ifeq ($(CONFIG_BT_COEXIST), y)
-EXTRA_CFLAGS += -I$(src)/hal/btc
+ccflags-y += -I$(src)/hal/btc
 _OUTSRC_FILES += hal/btc/HalBtc8723b1Ant.o \
 		 hal/btc/HalBtc8723b2Ant.o
 endif
@@ -110,7 +110,7 @@ ifeq ($(CONFIG_RTL8723B), y)
 
 MODULE_NAME = rtl8723bu
 
-EXTRA_CFLAGS += -DCONFIG_RTL8723B
+ccflags-y += -DCONFIG_RTL8723B
 
 _HAL_INTFS_FILES += hal/HalPwrSeqCmd.o \
 					hal/rtl8723b/Hal8723BPwrSeq.o\
@@ -151,100 +151,100 @@ endif
 
 ifeq ($(CONFIG_USB_HCI), y)
 ifeq ($(CONFIG_USB_AUTOSUSPEND), y)
-EXTRA_CFLAGS += -DCONFIG_USB_AUTOSUSPEND
+ccflags-y += -DCONFIG_USB_AUTOSUSPEND
 endif
 endif
 
 ifeq ($(CONFIG_POWER_SAVING), y)
-EXTRA_CFLAGS += -DCONFIG_POWER_SAVING
+ccflags-y += -DCONFIG_POWER_SAVING
 endif
 
 ifeq ($(CONFIG_HW_PWRP_DETECTION), y)
-EXTRA_CFLAGS += -DCONFIG_HW_PWRP_DETECTION
+ccflags-y += -DCONFIG_HW_PWRP_DETECTION
 endif
 
 ifeq ($(CONFIG_WIFI_TEST), y)
-EXTRA_CFLAGS += -DCONFIG_WIFI_TEST
+ccflags-y += -DCONFIG_WIFI_TEST
 endif
 
 ifeq ($(CONFIG_BT_COEXIST), y)
-EXTRA_CFLAGS += -DCONFIG_BT_COEXIST
+ccflags-y += -DCONFIG_BT_COEXIST
 endif
 
 ifeq ($(CONFIG_INTEL_WIDI), y)
-EXTRA_CFLAGS += -DCONFIG_INTEL_WIDI
+ccflags-y += -DCONFIG_INTEL_WIDI
 endif
 
 ifeq ($(CONFIG_WAPI_SUPPORT), y)
-EXTRA_CFLAGS += -DCONFIG_WAPI_SUPPORT
+ccflags-y += -DCONFIG_WAPI_SUPPORT
 endif
 
 ifeq ($(CONFIG_EXT_CLK), y)
-EXTRA_CFLAGS += -DCONFIG_EXT_CLK
+ccflags-y += -DCONFIG_EXT_CLK
 endif
 
 ifeq ($(CONFIG_TRAFFIC_PROTECT), y)
-EXTRA_CFLAGS += -DCONFIG_TRAFFIC_PROTECT
+ccflags-y += -DCONFIG_TRAFFIC_PROTECT
 endif
 
 ifeq ($(CONFIG_CALIBRATE_TX_POWER_BY_REGULATORY), y)
-EXTRA_CFLAGS += -DCONFIG_CALIBRATE_TX_POWER_BY_REGULATORY
+ccflags-y += -DCONFIG_CALIBRATE_TX_POWER_BY_REGULATORY
 endif
 
 ifeq ($(CONFIG_CALIBRATE_TX_POWER_TO_MAX), y)
-EXTRA_CFLAGS += -DCONFIG_CALIBRATE_TX_POWER_TO_MAX
+ccflags-y += -DCONFIG_CALIBRATE_TX_POWER_TO_MAX
 endif
 
 ifeq ($(CONFIG_RTW_ADAPTIVITY_EN), disable)
-EXTRA_CFLAGS += -DCONFIG_RTW_ADAPTIVITY_EN=0
+ccflags-y += -DCONFIG_RTW_ADAPTIVITY_EN=0
 else ifeq ($(CONFIG_RTW_ADAPTIVITY_EN), enable)
-EXTRA_CFLAGS += -DCONFIG_RTW_ADAPTIVITY_EN=1
+ccflags-y += -DCONFIG_RTW_ADAPTIVITY_EN=1
 endif
 
 ifeq ($(CONFIG_RTW_ADAPTIVITY_MODE), normal)
-EXTRA_CFLAGS += -DCONFIG_RTW_ADAPTIVITY_MODE=0
+ccflags-y += -DCONFIG_RTW_ADAPTIVITY_MODE=0
 else ifeq ($(CONFIG_RTW_ADAPTIVITY_MODE), carrier_sense)
-EXTRA_CFLAGS += -DCONFIG_RTW_ADAPTIVITY_MODE=1
+ccflags-y += -DCONFIG_RTW_ADAPTIVITY_MODE=1
 endif
 
 ifeq ($(CONFIG_SIGNAL_SCALE_MAPPING), y)
-EXTRA_CFLAGS += -DCONFIG_SIGNAL_SCALE_MAPPING
+ccflags-y += -DCONFIG_SIGNAL_SCALE_MAPPING
 endif
 
 ifeq ($(CONFIG_80211W), y)
-EXTRA_CFLAGS += -DCONFIG_IEEE80211W
+ccflags-y += -DCONFIG_IEEE80211W
 endif
 
 ifeq ($(CONFIG_RTW_SDIO_PM_KEEP_POWER), y)
 ifeq ($(CONFIG_SDIO_HCI), y)
-EXTRA_CFLAGS += -DCONFIG_RTW_SDIO_PM_KEEP_POWER
+ccflags-y += -DCONFIG_RTW_SDIO_PM_KEEP_POWER
 endif
 endif
 
 ifeq ($(CONFIG_REDUCE_TX_CPU_LOADING), y)
-EXTRA_CFLAGS += -DCONFIG_REDUCE_TX_CPU_LOADING
+ccflags-y += -DCONFIG_REDUCE_TX_CPU_LOADING
 endif
 
 ifeq ($(CONFIG_BR_EXT), y)
 BR_NAME = br0
-EXTRA_CFLAGS += -DCONFIG_BR_EXT
-EXTRA_CFLAGS += '-DCONFIG_BR_EXT_BRNAME="'$(BR_NAME)'"'
+ccflags-y += -DCONFIG_BR_EXT
+ccflags-y += '-DCONFIG_BR_EXT_BRNAME="'$(BR_NAME)'"'
 endif
 
 ifeq ($(CONFIG_TDLS), y)
-EXTRA_CFLAGS += -DCONFIG_TDLS
+ccflags-y += -DCONFIG_TDLS
 endif
 
 ifeq ($(CONFIG_WIFI_MONITOR), y)
-EXTRA_CFLAGS += -DCONFIG_WIFI_MONITOR
+ccflags-y += -DCONFIG_WIFI_MONITOR
 endif
 
-EXTRA_CFLAGS += -DDM_ODM_SUPPORT_TYPE=0x04
+ccflags-y += -DDM_ODM_SUPPORT_TYPE=0x04
 
 ifeq ($(CONFIG_PLATFORM_ANDROID_X86), y)
-EXTRA_CFLAGS += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID
-EXTRA_CFLAGS += -DCONFIG_CONCURRENT_MODE
-EXTRA_CFLAGS += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
+ccflags-y += -DCONFIG_LITTLE_ENDIAN -DCONFIG_PLATFORM_ANDROID
+ccflags-y += -DCONFIG_CONCURRENT_MODE
+ccflags-y += -DCONFIG_IOCTL_CFG80211 -DRTW_USE_CFG80211_STA_EVENT
 SUBARCH := $(shell uname -m | sed -e s/i.86/i386/)
 ARCH := $(SUBARCH)
 endif

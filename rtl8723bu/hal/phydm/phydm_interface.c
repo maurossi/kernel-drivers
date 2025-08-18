@@ -593,7 +593,11 @@ ODM_CancelTimer(
 	)
 {
 #if (DM_ODM_SUPPORT_TYPE & ODM_AP)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0))
+	timer_delete(pTimer);
+#else
 	del_timer(pTimer);
+#endif
 #elif (DM_ODM_SUPPORT_TYPE & ODM_CE)
 	_cancel_timer_ex(pTimer);
 #elif (DM_ODM_SUPPORT_TYPE & ODM_WIN)
