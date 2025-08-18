@@ -280,7 +280,11 @@ __inline static void rtw_list_delete(_list *plist)
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 15, 0))
 static void legacy_timer_emu_func(struct timer_list *t)
 {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0))
+	struct legacy_timer_emu *lt = timer_container_of(lt, t, t);
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0))
 	struct legacy_timer_emu *lt = from_timer(lt, t, t);
+#endif
 	lt->function(lt->data);
 }
 #endif
