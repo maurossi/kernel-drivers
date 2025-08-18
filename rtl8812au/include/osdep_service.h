@@ -207,7 +207,11 @@ extern void rtw_init_timer(_timer *ptimer, void *padapter, void *pfunc);
 
 __inline static unsigned char _cancel_timer_ex(_timer *ptimer)
 {
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0))
+	return timer_delete_sync(ptimer);
+#else
 	return del_timer_sync(ptimer);
+#endif
 }
 
 static __inline void thread_enter(char *name)
