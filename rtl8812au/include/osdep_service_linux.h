@@ -262,6 +262,10 @@ __inline static void _cancel_timer(_timer *ptimer,u8 *bcancelled)
 	*bcancelled=  true;//TRUE ==1; FALSE==0
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 16, 0))
+#define from_timer(var, callback_timer, timer_fieldname)	\
+	container_of(callback_timer, typeof(*var), timer_fieldname)
+#endif
 
 __inline static void _init_workitem(_workitem *pwork, void *pfunc, void * cntx)
 {
