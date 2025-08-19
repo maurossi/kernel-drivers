@@ -1,0 +1,69 @@
+diff -Naur hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_hybrid.c hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_cfg80211_hybrid.c
+--- hybrid-v35_64-nodebug-pcoem-6_30_223_271.orig/src/wl/sys/wl_cfg80211_hybrid.c
++++ hybrid-v35_64-nodebug-pcoem-6_30_223_271/src/wl/sys/wl_cfg80211_hybrid.c
+@@ -70,7 +70,11 @@
+ static s32 wl_cfg80211_scan(struct wiphy *wiphy, struct net_device *ndev,
+            struct cfg80211_scan_request *request);
+ #endif
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static s32 wl_cfg80211_set_wiphy_params(struct wiphy *wiphy, int radio_idx, u32 changed);
++#else
+ static s32 wl_cfg80211_set_wiphy_params(struct wiphy *wiphy, u32 changed);
++#endif
+ static s32 wl_cfg80211_join_ibss(struct wiphy *wiphy, struct net_device *dev,
+            struct cfg80211_ibss_params *params);
+ static s32 wl_cfg80211_leave_ibss(struct wiphy *wiphy, struct net_device *dev);
+@@ -92,6 +96,9 @@
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
+ static s32
+ wl_cfg80211_set_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev,
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++                         int radio_idx,
++#endif
+                          enum nl80211_tx_power_setting type, s32 dbm);
+ #elif LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)
+ static s32 wl_cfg80211_set_tx_power(struct wiphy *wiphy,
+@@ -101,7 +108,9 @@
+            enum tx_power_setting type, s32 dbm);
+ #endif
+ 
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev, int radio_idx, unsigned int link_id, s32 *dbm);
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0)
+ static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev, unsigned int link_id, s32 *dbm);
+ #elif LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
+ static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev, s32 *dbm);
+@@ -733,7 +742,11 @@
+ 	return err;
+ }
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static s32 wl_cfg80211_set_wiphy_params(struct wiphy *wiphy, int radio_idx, u32 changed)
++#else
+ static s32 wl_cfg80211_set_wiphy_params(struct wiphy *wiphy, u32 changed)
++#endif
+ {
+ 	struct wl_cfg80211_priv *wl = wiphy_to_wl(wiphy);
+ 	struct net_device *ndev = wl_to_ndev(wl);
+@@ -1171,6 +1184,9 @@
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
+ static s32
+ wl_cfg80211_set_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev,
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++                         int radio_idx,
++#endif
+                          enum nl80211_tx_power_setting type, s32 dbm)
+ #elif LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 36)
+ static s32
+@@ -1229,7 +1245,9 @@
+ 	return err;
+ }
+ 
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 17, 0)
++static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev, int radio_idx, unsigned int link_id, s32 *dbm)
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0)
+ static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev, unsigned int link_id, s32 *dbm)
+ #elif LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0)
+ static s32 wl_cfg80211_get_tx_power(struct wiphy *wiphy, struct wireless_dev *wdev, s32 *dbm)
